@@ -2,7 +2,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useFieldArray, useForm, SubmitHandler } from "react-hook-form";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Steps } from "./steps";
 import { Meteors } from "./ui/meteors";
 import { FromInputs, StepsType } from "@/types/types";
@@ -10,6 +10,10 @@ import { Button } from "./ui/button";
 import { ArrowLeftIcon, ArrowRightIcon } from "@radix-ui/react-icons";
 import { formSchema } from "@/Schemas/form.schema";
 import { Form } from "./ui/form";
+import { InputField } from "./form-fields/input-field";
+import { TextareaField } from "./form-fields/textarea-field";
+import { SelectField } from "./form-fields/select-field";
+import { DateField } from "./form-fields/date-field";
 
 const steps: StepsType[] = [
   {
@@ -44,7 +48,19 @@ export function MultiStepForm() {
 
   const form = useForm<FromInputs>({
     resolver: zodResolver(formSchema),
-    defaultValues: {},
+    defaultValues: {
+      personalInformation: {
+        fullName: "",
+        email: "",
+        nationality: "",
+        phone: "",
+        occupation: "",
+        address: "",
+        reasonForVisit: "",
+        gender: "",
+        dateOfBirth: "",
+      },
+    },
   });
 
   const {
@@ -91,9 +107,10 @@ export function MultiStepForm() {
 
   return (
     <section id="form" className="bg-primary p-4 md:p-12 bg-grid-white/[0.2]">
-      <div className="relative bg-background h-[40rem] rounded-[var(--radius)] flex flex-col md:flex-row overflow-hidden">
+      <div className="relative bg-background min-h-[40rem] rounded-[var(--radius)] flex flex-col md:flex-row overflow-hidden">
         {/* left side */}
         <div className="md:w-1/3 bg-muted p-8">
+          <p>{JSON.stringify(errors, null, 2)}</p>
           <Steps steps={steps} currentStep={currentStep} />
         </div>
 
@@ -101,13 +118,75 @@ export function MultiStepForm() {
         <div className="md:w-2/3 p-8">
           {/* Form */}
           <Form {...form}>
-            <form onSubmit={handleSubmit(processForm)}>
-              <p>{JSON.stringify(errors, null, 2)}</p>
+            <form onSubmit={handleSubmit(processForm)} className="space-y-4">
+              <InputField
+                control={control}
+                name="personalInformation.fullName"
+                placeholder="Full Name"
+                label="Type your full name"
+              />
+
+              <InputField
+                control={control}
+                name="personalInformation.dateOfBirth"
+                label="What is your birth date?"
+                placeholder="YYYY-MM-DD"
+              />
+
+              <InputField
+                control={control}
+                name="personalInformation.email"
+                placeholder="abc@gmail.com"
+                label="Write your email address"
+              />
+
+              <InputField
+                control={control}
+                name="personalInformation.nationality"
+                placeholder="Bangladeshi"
+                label="What is your nationality?"
+              />
+
+              <InputField
+                control={control}
+                name="personalInformation.phone"
+                placeholder="+8801923434323"
+                label="Type your phone number"
+              />
+
+              <InputField
+                control={control}
+                name="personalInformation.occupation"
+                placeholder="Programmer"
+                label="What is your occupation?"
+              />
+
+              <TextareaField
+                control={control}
+                name="personalInformation.address"
+                label="Type your address"
+                placeholder="Write your address here ..."
+              />
+
+              <SelectField
+                control={control}
+                name="personalInformation.gender"
+                placeholder="Select your gender"
+                label="Select your gender"
+                data={["male", "female"]}
+              />
+
+              <TextareaField
+                control={control}
+                name="personalInformation.reasonForVisit"
+                label="Why you want to visit MARS?"
+                placeholder="Explain Why You want to visit MARS ... "
+              />
             </form>
           </Form>
 
           {/* Navigation */}
-          <div className="">
+          <div className="mt-4">
             <div className="flex justify-between">
               <Button
                 type="button"

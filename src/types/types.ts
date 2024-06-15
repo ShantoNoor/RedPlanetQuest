@@ -16,3 +16,4 @@ export type StyleType = {
   animationDelay: string;
   animationDuration: string;
 };
+
