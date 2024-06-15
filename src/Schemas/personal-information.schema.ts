@@ -4,12 +4,14 @@ import { phoneSchema } from "./phone.schema";
 export const personalInformationSchema = z.object({
   // image: z.any(),
   fullName: z.string().min(1),
+  nationality: z.string().min(1),
   dateOfBirth: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Required format: YYYY-MM-DD"), 
   email: z.string().email(),
   phone: phoneSchema,
   address: z.string().min(1),
   gender: z.enum(["male", "female"]),
   occupation: z.string().min(1),
+  reasonForVisit: z.string().min(1),
   // education: z
   //   .array(
   //     z.object({
@@ -27,5 +29,4 @@ export const personalInformationSchema = z.object({
   //     })
   //   )
   //   .optional(),
-  reasonForVisit: z.string().min(1),
 });

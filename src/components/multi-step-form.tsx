@@ -10,10 +10,7 @@ import { Button } from "./ui/button";
 import { ArrowLeftIcon, ArrowRightIcon } from "@radix-ui/react-icons";
 import { formSchema } from "@/Schemas/form.schema";
 import { Form } from "./ui/form";
-import { InputField } from "./form-fields/input-field";
-import { TextareaField } from "./form-fields/textarea-field";
-import { SelectField } from "./form-fields/select-field";
-import { DateField } from "./form-fields/date-field";
+import { FormStepOne } from "./form-steps/form-step-one";
 
 const steps: StepsType[] = [
   {
@@ -57,7 +54,7 @@ export function MultiStepForm() {
         occupation: "",
         address: "",
         reasonForVisit: "",
-        gender: "",
+        // gender: "",
         dateOfBirth: "",
       },
     },
@@ -119,68 +116,12 @@ export function MultiStepForm() {
           {/* Form */}
           <Form {...form}>
             <form onSubmit={handleSubmit(processForm)} className="space-y-4">
-              <InputField
+              <FormStepOne
                 control={control}
-                name="personalInformation.fullName"
-                placeholder="Full Name"
-                label="Type your full name"
-              />
-
-              <InputField
-                control={control}
-                name="personalInformation.dateOfBirth"
-                label="What is your birth date?"
-                placeholder="YYYY-MM-DD"
-              />
-
-              <InputField
-                control={control}
-                name="personalInformation.email"
-                placeholder="abc@gmail.com"
-                label="Write your email address"
-              />
-
-              <InputField
-                control={control}
-                name="personalInformation.nationality"
-                placeholder="Bangladeshi"
-                label="What is your nationality?"
-              />
-
-              <InputField
-                control={control}
-                name="personalInformation.phone"
-                placeholder="+8801923434323"
-                label="Type your phone number"
-              />
-
-              <InputField
-                control={control}
-                name="personalInformation.occupation"
-                placeholder="Programmer"
-                label="What is your occupation?"
-              />
-
-              <TextareaField
-                control={control}
-                name="personalInformation.address"
-                label="Type your address"
-                placeholder="Write your address here ..."
-              />
-
-              <SelectField
-                control={control}
-                name="personalInformation.gender"
-                placeholder="Select your gender"
-                label="Select your gender"
-                data={["male", "female"]}
-              />
-
-              <TextareaField
-                control={control}
-                name="personalInformation.reasonForVisit"
-                label="Why you want to visit MARS?"
-                placeholder="Explain Why You want to visit MARS ... "
+                steps={steps}
+                currentStep={currentStep}
+                delta={delta}
+                stepFor={0}
               />
             </form>
           </Form>
