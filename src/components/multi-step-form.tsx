@@ -90,7 +90,7 @@ export function MultiStepForm() {
   };
 
   return (
-    <section id="form" className="bg-primary p-4 md:p-12">
+    <section id="form" className="bg-primary p-4 md:p-12 bg-grid-white/[0.2]">
       <div className="relative bg-background h-[40rem] rounded-[var(--radius)] flex flex-col md:flex-row overflow-hidden">
         {/* left side */}
         <div className="md:w-1/3 bg-muted p-8">
