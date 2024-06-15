@@ -1,6 +1,6 @@
 import { formSchema } from "../Schemas/form.schema";
 
-describe("Form Validation Schema", () => {
+describe("Form Validation", () => {
   it("should validate correct form data successfully", () => {
     const formData = {
       personalInformation: {
