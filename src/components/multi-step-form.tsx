@@ -1,29 +1,46 @@
 "use client";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useFieldArray, useForm, SubmitHandler } from "react-hook-form";
+import { useForm, SubmitHandler } from "react-hook-form";
 
-import { useEffect, useState } from "react";
+import {  useState } from "react";
 import { Steps } from "./steps";
 import { Meteors } from "./ui/meteors";
 import { FromInputs, StepsType } from "@/types/types";
 import { Button } from "./ui/button";
 import { ArrowLeftIcon, ArrowRightIcon } from "@radix-ui/react-icons";
-import { formSchema } from "@/Schemas/form.schema";
+import { formSchema } from "@/schemas/form.schema";
 import { Form } from "./ui/form";
 import { FormStepOne } from "./form-steps/form-step-one";
+import { FormStepTwo } from "./form-steps/form-step-two";
 
 const steps: StepsType[] = [
   {
     id: "Step 1",
     name: "Personal Information",
     details: "Please, provide information's about you",
-    fields: [],
+    fields: [
+      "personalInformation.fullName",
+      "personalInformation.dateOfBirth",
+      "personalInformation.email",
+      "personalInformation.nationality",
+      "personalInformation.phone",
+      "personalInformation.occupation",
+      "personalInformation.address",
+      "personalInformation.gender",
+      "personalInformation.reasonForVisit",
+      "personalInformation.education",
+    ],
   },
   {
     id: "Step 2",
     name: "Travel Preferences",
     details: "Please, carefully fill up your travel preferences",
-    fields: [],
+    fields: [
+      "travelPreferences.departureDate",
+      "travelPreferences.returnDate",
+      "travelPreferences.accommodationPreference",
+      "travelPreferences.specialRequests",
+    ],
   },
   {
     id: "Step 3",
@@ -44,6 +61,7 @@ export function MultiStepForm() {
   const delta = currentStep - previousStep;
 
   const form = useForm<FromInputs>({
+    mode: "all",
     resolver: zodResolver(formSchema),
     defaultValues: {
       personalInformation: {
@@ -54,8 +72,12 @@ export function MultiStepForm() {
         occupation: "",
         address: "",
         reasonForVisit: "",
-        // gender: "",
         dateOfBirth: "",
+      },
+      travelPreferences: {
+        departureDate: "",
+        returnDate: "",
+        specialRequests: "",
       },
     },
   });
@@ -70,24 +92,20 @@ export function MultiStepForm() {
     formState: { errors },
   } = form;
 
-  // const { fields, append, remove } = useFieldArray({
-  //   control,
-  //   name: "type name here",
-  // });
-
   const next = async () => {
+    type FieldName = keyof FromInputs;
+
     const fields = steps[currentStep].fields;
 
-    // const output = await trigger(fields, { shouldFocus: true });
-    // if (!output) return;
+    const output = await trigger(fields as FieldName[], { shouldFocus: true });
+    if (!output) return;
 
     if (currentStep < steps.length - 1) {
-      await handleSubmit(processForm)();
-      // if (currentStep === steps.length - 2) {
-      //   await handleSubmit(processForm)();
-      // }
-      // setPreviousStep(currentStep);
-      // setCurrentStep((step) => step + 1);
+      if (currentStep === steps.length - 2) {
+        await handleSubmit(processForm)();
+      }
+      setPreviousStep(currentStep);
+      setCurrentStep((step) => step + 1);
     }
   };
 
@@ -112,16 +130,22 @@ export function MultiStepForm() {
         </div>
 
         {/* right side */}
-        <div className="md:w-2/3 p-8">
+        <div className="md:w-2/3 p-8 overflow-hidden">
           {/* Form */}
           <Form {...form}>
-            <form onSubmit={handleSubmit(processForm)} className="space-y-4">
+            <form onSubmit={handleSubmit(processForm)}>
               <FormStepOne
                 control={control}
                 steps={steps}
                 currentStep={currentStep}
                 delta={delta}
-                stepFor={0}
+              />
+
+              <FormStepTwo
+                control={control}
+                steps={steps}
+                currentStep={currentStep}
+                delta={delta}
               />
             </form>
           </Form>

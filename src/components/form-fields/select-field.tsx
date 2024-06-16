@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
   FormControl,
   FormField,
@@ -28,6 +29,10 @@ export function SelectField({
   placeholder,
   data,
 }: SelectFieldProps) {
+  // using this state to match the color of select with other fields
+  // just checking the firstSet if it is false then set the placeholder color
+  const [firstSet, setFirstSet] = useState<boolean>(false);
+
   return (
     <FormField
       control={control}
@@ -37,9 +42,19 @@ export function SelectField({
           <FormLabel className="capitalize">{label}</FormLabel>
           <FormControl>
             <FormItem>
-              <Select onValueChange={field.onChange} value={field.value}>
+              <Select
+                onValueChange={(value) => {
+                  field.onChange(value);
+                  setFirstSet(true);
+                }}
+                value={field.value}
+              >
                 <FormControl>
-                  <SelectTrigger className="capitalize text-muted-foreground font-medium">
+                  <SelectTrigger
+                    className={`capitalize ${
+                      firstSet ? "text-foreground" : "text-muted-foreground"
+                    }`}
+                  >
                     <SelectValue placeholder={placeholder} />
                   </SelectTrigger>
                 </FormControl>
@@ -51,7 +66,6 @@ export function SelectField({
                   ))}
                 </SelectContent>
               </Select>
-              <FormMessage />
             </FormItem>
           </FormControl>
           <FormMessage />

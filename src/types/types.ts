@@ -1,4 +1,4 @@
-import { formSchema } from "@/Schemas/form.schema";
+import { formSchema } from "@/schemas/form.schema";
 import { z } from "zod";
 
 export type StepsType = {
@@ -16,4 +16,3 @@ export type StyleType = {
   animationDelay: string;
   animationDuration: string;
 };
-

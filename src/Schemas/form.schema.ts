@@ -5,6 +5,6 @@ import { healthSafetySchema } from "./health-safety-schema";
 
 export const formSchema = z.object({
   personalInformation: personalInformationSchema,
-  // travelPreferences: travelPreferencesSchema,
-  // healthSafety: healthSafetySchema,
+  travelPreferences: travelPreferencesSchema,
+  healthSafety: healthSafetySchema,
 });

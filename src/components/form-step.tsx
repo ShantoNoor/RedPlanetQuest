@@ -24,7 +24,7 @@ export function FormStep({
       transition={{ duration: 0.3, ease: "easeInOut" }}
     >
       <FormHeading step={step} />
-      {children}
+      <div className="space-y-4">{children}</div>
     </motion.div>
   );
 }

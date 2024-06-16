@@ -11,11 +11,7 @@ export function Steps({
 }) {
   return (
     <div aria-label="Progress">
-      <div className="font-medium text-lg h-[9rem] flex items-center justify-center text-center">
-        <p className="capitalize">{steps[currentStep].details}</p>
-      </div>
-      <Separator className="bg-primary mb-4" />
-      <ol role="list" className="space-y-4">
+      <ol role="list" className="space-y-4 md:mt-12">
         {steps.map((step: StepsType, index: number) => (
           <li key={step.name} className="bg-background">
             {currentStep > index ? (

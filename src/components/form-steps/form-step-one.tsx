@@ -2,18 +2,17 @@ import { StepsType } from "@/types/types";
 import { InputField } from "../form-fields/input-field";
 import { SelectField } from "../form-fields/select-field";
 import { TextareaField } from "../form-fields/textarea-field";
-import { FormStep } from "../form-setp";
+import { FormStep } from "../form-step";
 
+const stepFor = 0; // step one
 export function FormStepOne({
   control,
   currentStep,
   steps,
   delta,
-  stepFor = 0,
 }: {
   control: any;
   currentStep: number;
-  stepFor: number;
   steps: StepsType[];
   delta: number;
 }) {
@@ -22,7 +21,7 @@ export function FormStepOne({
       currentStep={currentStep}
       step={steps[stepFor]}
       delta={delta}
-      stepFor={0}
+      stepFor={stepFor}
     >
       <InputField
         control={control}
@@ -86,6 +85,13 @@ export function FormStepOne({
         name="personalInformation.reasonForVisit"
         label="Why you want to visit MARS?"
         placeholder="Explain Why You want to visit MARS ... "
+      />
+
+      <TextareaField
+        control={control}
+        name="personalInformation.education"
+        label="What is your highest educational qualification?"
+        placeholder="Tell us about your education ..."
       />
     </FormStep>
   );
