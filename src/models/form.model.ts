@@ -1,4 +1,4 @@
-import mongoose, { Schema, Document } from "mongoose";
+import mongoose, { Schema, Document, Model } from "mongoose";
 
 interface EmergencyContact {
   fullName: string;
@@ -25,20 +25,20 @@ interface HealthSafety extends Document {
 }
 
 interface TravelPreferences extends Document {
-  departureDate: string;
-  returnDate: string;
-  accommodationPreference: string;
+  departureDate: Date;
+  returnDate: Date;
+  accommodationPreference: "space hotel" | "martian base";
   specialRequests?: string;
 }
 
 interface PersonalInformation extends Document {
   fullName: string;
-  dateOfBirth: string;
+  dateOfBirth: Date;
   nationality: string;
   email: string;
   phone: string;
   address: string;
-  gender: string;
+  gender: "male" | "female";
   occupation: string;
   education: string;
   reasonForVisit: string;
@@ -104,5 +104,5 @@ const FormSchema: Schema = new Schema({
   healthSafety: { type: HealthSafetySchema, required: true },
 });
 
-const FormModel = mongoose.models.form || mongoose.model("form", FormSchema);
+const FormModel: Model<Form> = mongoose.models.form || mongoose.model<Form>("form", FormSchema);
 export default FormModel;

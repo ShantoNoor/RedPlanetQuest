@@ -14,6 +14,7 @@ import { FormStepOne } from "./form-steps/form-step-one";
 import { FormStepTwo } from "./form-steps/form-step-two";
 import { FormStepThree } from "./form-steps/form-step-three";
 import axios from "axios";
+import { FormStepFinal } from "./form-steps/form-step-final";
 
 const steps: StepsType[] = [
   {
@@ -134,6 +135,7 @@ export function MultiStepForm() {
     if (currentStep < steps.length - 1) {
       if (currentStep === steps.length - 2) {
         await handleSubmit(processForm)();
+        reset();
       }
       setPreviousStep(currentStep);
       setCurrentStep((step) => step + 1);
@@ -154,10 +156,11 @@ export function MultiStepForm() {
     try {
       setLoading(true);
       const response = await axios.post("/api/add", data);
-      console.log(response.data);
-      console.log("Adding form information to db", response.data, {
-        timeout: 5000, // 5 seconds timeout
-      });
+      console.log("Adding form information to db", response);
+      if (response.status) {
+        console.log("Successfully added form data to db", response);
+        reset();
+      }
     } catch (error: any) {
       console.log("Failed to and form information", error.message);
     } finally {
@@ -174,7 +177,7 @@ export function MultiStepForm() {
         </div>
 
         {/* right side */}
-        <div className="md:w-2/3 p-8 overflow-hidden">
+        <div className="md:w-2/3 p-8 overflow-hidden flex flex-col justify-center min-h-full gap-4">
           {/* Form */}
           <Form {...form}>
             <form onSubmit={handleSubmit(processForm)}>
@@ -199,11 +202,18 @@ export function MultiStepForm() {
                 delta={delta}
                 setFormValue={setValue}
               />
+
+              <FormStepFinal
+                steps={steps}
+                currentStep={currentStep}
+                delta={delta}
+                loading={loading}
+              />
             </form>
           </Form>
 
           {/* Navigation */}
-          <div className="mt-4">
+          <div className="">
             <div className="flex justify-between">
               <Button
                 type="button"

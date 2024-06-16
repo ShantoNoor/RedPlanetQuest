@@ -13,7 +13,7 @@ export function FormStep({
   stepFor: number;
   step: StepsType;
   delta: number;
-  children: React.ReactNode;
+  children?: React.ReactNode;
 }) {
   if (currentStep !== stepFor) return;
 
