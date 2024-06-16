@@ -20,6 +20,13 @@ git clone https://github.com/ShantoNoor/red-planet-quest.git
 npm install
 ```
 
+## Create a .env file at the root of the repository and just bring your mongodb connection string into it like shown below
+> create a file named .env
+```bash
+DB_URI=mongodb+srv://<username>:<password>@cluster0.blxzqo7.mongodb.net/RedPlanetQuest
+```
+> replace the `<username>` and `<password>` based your configuration
+
 ## After the installation is complete run the following command to launch the project in development mode
 
 ```bash
