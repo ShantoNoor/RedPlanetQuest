@@ -2,7 +2,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, SubmitHandler } from "react-hook-form";
 
-import {  useState } from "react";
+import { useState } from "react";
 import { Steps } from "./steps";
 import { Meteors } from "./ui/meteors";
 import { FromInputs, StepsType } from "@/types/types";
@@ -12,6 +12,7 @@ import { formSchema } from "@/schemas/form.schema";
 import { Form } from "./ui/form";
 import { FormStepOne } from "./form-steps/form-step-one";
 import { FormStepTwo } from "./form-steps/form-step-two";
+import { FormStepThree } from "./form-steps/form-step-three";
 
 const steps: StepsType[] = [
   {
@@ -46,7 +47,21 @@ const steps: StepsType[] = [
     id: "Step 3",
     name: "Health Declaration",
     details: "Please, answer the questions carefully.",
-    fields: [],
+    fields: [
+      "healthSafety.chronicIllnesses",
+      "healthSafety.takingMedication",
+      "healthSafety.majorSurgeries",
+      "healthSafety.allergies",
+      "healthSafety.emergencyContact.fullName",
+      "healthSafety.emergencyContact.relation",
+      "healthSafety.emergencyContact.phone",
+      "healthSafety.emergencyContact.email",
+      "healthSafety.emergencyContact.address",
+      "healthSafety.medicalConditions.chronicIllnesses",
+      "healthSafety.medicalConditions.takingMedication",
+      "healthSafety.medicalConditions.majorSurgeries",
+      "healthSafety.medicalConditions.allergies",
+    ],
   },
   {
     id: "Step 4",
@@ -79,6 +94,21 @@ export function MultiStepForm() {
         returnDate: "",
         specialRequests: "",
       },
+      healthSafety: {
+        medicalConditions: {
+          chronicIllnesses: "",
+          takingMedication: "",
+          majorSurgeries: "",
+          allergies: "",
+        },
+        emergencyContact: {
+          fullName: "",
+          relation: "",
+          phone: "",
+          email: "",
+          address: "",
+        },
+      },
     },
   });
 
@@ -86,7 +116,6 @@ export function MultiStepForm() {
     handleSubmit,
     reset,
     trigger,
-    watch,
     setValue,
     control,
     formState: { errors },
@@ -146,6 +175,14 @@ export function MultiStepForm() {
                 steps={steps}
                 currentStep={currentStep}
                 delta={delta}
+              />
+
+              <FormStepThree
+                control={control}
+                steps={steps}
+                currentStep={currentStep}
+                delta={delta}
+                setFormValue={setValue}
               />
             </form>
           </Form>

@@ -24,23 +24,37 @@ export const healthSafetySchema = z
       .optional(),
   })
   .refine(
-    (data) => {
-      if (data.chronicIllnesses && !data.medicalConditions?.chronicIllnesses) {
-        return false;
-      }
-      if (data.takingMedication && !data.medicalConditions?.takingMedication) {
-        return false;
-      }
-      if (data.majorSurgeries && !data.medicalConditions?.majorSurgeries) {
-        return false;
-      }
-      if (data.allergies && !data.medicalConditions?.allergies) {
-        return false;
-      }
-      return true;
-    },
+    (data) =>
+      !data.chronicIllnesses ||
+      (data.chronicIllnesses && data.medicalConditions?.chronicIllnesses),
     {
-      message: "Medical conditions must be provided if declaration is Yes",
-      path: ["medicalConditions"],
+      message: "Chronic Illnesses must be provided if declaration is Yes",
+      path: ["medicalConditions.chronicIllnesses"],
+    }
+  )
+  .refine(
+    (data) =>
+      !data.takingMedication ||
+      (data.takingMedication && data.medicalConditions?.takingMedication),
+    {
+      message: "Medication details must be provided if declaration is Yes",
+      path: ["medicalConditions.takingMedication"],
+    }
+  )
+  .refine(
+    (data) =>
+      !data.majorSurgeries ||
+      (data.majorSurgeries && data.medicalConditions?.majorSurgeries),
+    {
+      message: "Major Surgeries details must be provided if declaration is Yes",
+      path: ["medicalConditions.majorSurgeries"],
+    }
+  )
+  .refine(
+    (data) =>
+      !data.allergies || (data.allergies && data.medicalConditions?.allergies),
+    {
+      message: "Allergies details must be provided if declaration is Yes",
+      path: ["medicalConditions.allergies"],
     }
   );
