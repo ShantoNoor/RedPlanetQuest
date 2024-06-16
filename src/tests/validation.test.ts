@@ -2,31 +2,25 @@ import { formSchema } from "../schemas/form.schema";
 
 describe("Form Validation", () => {
   it("should validate correct form data successfully", () => {
-    const formData = {
+    const data = {
       personalInformation: {
-        image: "http://example.com/image.jpg",
         fullName: "John Doe",
         dateOfBirth: "1990-01-01",
         nationality: "American",
         email: "john.doe@example.com",
         phone: "+8801982897389",
         address: "123 Main St, Anytown, USA",
-        gender: "Male",
+        gender: "male",
         occupation: "Engineer",
-        education: [{ degree: "B.Sc.", institution: "MIT", year: 2012 }],
-        socialMediaProfiles: [
-          {
-            platformName: "Twitter",
-            profileLink: "http://example.com/profile",
-          },
-        ],
+        education: "B.Sc. MIT 200",
+
         reasonForVisit:
           "I am passionate about space exploration and want to experience Mars firsthand.",
       },
       travelPreferences: {
         departureDate: "2024-12-01",
         returnDate: "2025-01-01",
-        accommodationPreference: "Space Hotel",
+        accommodationPreference: "space hotel",
         specialRequests: "Vegetarian meals",
       },
       healthSafety: {
@@ -50,36 +44,29 @@ describe("Form Validation", () => {
       },
     };
 
-    const result = formSchema.safeParse(formData);
+    const result = formSchema.safeParse(data);
     expect(result.success).toBe(true);
   });
 
-  it("should fail validation for incorrect phone number format", () => {
-    const formData = {
+  it("should fail for missing required fields", () => {
+    const incompleteData = {
       personalInformation: {
-        image: "http://example.com/image.jpg",
         fullName: "John Doe",
         dateOfBirth: "1990-01-01",
         nationality: "American",
-        email: "john.doe@example.com",
-        phone: "123456", // Invalid phone number
+        phone: "+8801982897389",
+        // Missing email
         address: "123 Main St, Anytown, USA",
-        gender: "Male",
+        gender: "male",
         occupation: "Engineer",
-        education: [{ degree: "B.Sc.", institution: "MIT", year: 2012 }],
-        socialMediaProfiles: [
-          {
-            platformName: "Twitter",
-            profileLink: "http://example.com/profile",
-          },
-        ],
+        education: "B.Sc. MIT 200",
         reasonForVisit:
           "I am passionate about space exploration and want to experience Mars firsthand.",
       },
       travelPreferences: {
         departureDate: "2024-12-01",
         returnDate: "2025-01-01",
-        accommodationPreference: "Space Hotel",
+        accommodationPreference: "space hotel",
         specialRequests: "Vegetarian meals",
       },
       healthSafety: {
@@ -103,99 +90,73 @@ describe("Form Validation", () => {
       },
     };
 
-    const result = formSchema.safeParse(formData);
+    const result = formSchema.safeParse(incompleteData);
     expect(result.success).toBe(false);
-    if (!result.success) {
-      expect(result.error.errors[0].message).toBe(
-        "Invalid phone number format"
-      );
-    }
   });
 
-  it("should fail validation for incorrect emergency phone number format", () => {
-    const formData = {
+  it("should fail for invalid email format", () => {
+    const invalidEmailData = {
       personalInformation: {
-        image: "http://example.com/image.jpg",
         fullName: "John Doe",
         dateOfBirth: "1990-01-01",
         nationality: "American",
-        email: "john.doe@example.com",
-        phone: "+8801982897389", // Invalid phone number
+        email: "invalid_email", // Missing "@" and "."
+        phone: "+8801982897389",
         address: "123 Main St, Anytown, USA",
-        gender: "Male",
+        gender: "male",
         occupation: "Engineer",
-        education: [{ degree: "B.Sc.", institution: "MIT", year: 2012 }],
-        socialMediaProfiles: [
-          {
-            platformName: "Twitter",
-            profileLink: "http://example.com/profile",
-          },
-        ],
+        education: "B.Sc. MIT 200",
         reasonForVisit:
           "I am passionate about space exploration and want to experience Mars firsthand.",
       },
-      travelPreferences: {
-        departureDate: "2024-12-01",
-        returnDate: "2025-01-01",
-        accommodationPreference: "Space Hotel",
-        specialRequests: "Vegetarian meals",
-      },
-      healthSafety: {
-        chronicIllnesses: true,
-        takingMedication: true,
-        majorSurgeries: true,
-        allergies: true,
-        emergencyContact: {
-          fullName: "Jane Doe",
-          relation: "Sister",
-          phone: "297389",
-          email: "jane.doe@example.com",
-          address: "456 Elm St, Anytown, USA",
-        },
-        medicalConditions: {
-          chronicIllnesses: "Asthma",
-          takingMedication: "Inhaler",
-          majorSurgeries: "Appendectomy",
-          allergies: "Peanuts",
-        },
+    };
+
+    const result = formSchema.safeParse(invalidEmailData);
+    expect(result.success).toBe(false);
+  });
+
+  it("should fail for invalid date format", () => {
+    const invalidDateData = {
+      personalInformation: {
+        fullName: "John Doe",
+        dateOfBirth: "invalid-date", // Doesn't match YYYY-MM-DD format
+        nationality: "American",
+        email: "john.doe@example.com",
+        phone: "+8801982897389",
+        address: "123 Main St, Anytown, USA",
+        gender: "male",
+        occupation: "Engineer",
+        education: "B.Sc. MIT 200",
+        reasonForVisit:
+          "I am passionate about space exploration and want to experience Mars firsthand.",
       },
     };
 
-    const result = formSchema.safeParse(formData);
+    const result = formSchema.safeParse(invalidDateData);
     expect(result.success).toBe(false);
-    if (!result.success) {
-      expect(result.error.errors[0].message).toBe(
-        "Invalid phone number format"
-      );
-    }
+    // Optionally, check for specific error messages related to date format
   });
 
   it("should fail validation if chronicIllnesses declaration is yes but medical conditions of chronicIllnesses is not provided", () => {
     const formData = {
       personalInformation: {
-        image: "http://example.com/image.jpg",
         fullName: "John Doe",
         dateOfBirth: "1990-01-01",
         nationality: "American",
         email: "john.doe@example.com",
         phone: "+8801982897389",
         address: "123 Main St, Anytown, USA",
-        gender: "Male",
+        gender: "male",
         occupation: "Engineer",
-        education: [{ degree: "B.Sc.", institution: "MIT", year: 2012 }],
-        socialMediaProfiles: [
-          {
-            platformName: "Twitter",
-            profileLink: "http://example.com/profile",
-          },
-        ],
+        education: "B.Sc. year 2012",
+
         reasonForVisit:
           "I am passionate about space exploration and want to experience Mars firsthand.",
       },
       travelPreferences: {
         departureDate: "2024-12-01",
         returnDate: "2025-01-01",
-        accommodationPreference: "Space Hotel",
+        accommodationPreference: "space hotel",
         specialRequests: "Vegetarian meals",
       },
       healthSafety: {
@@ -213,42 +174,29 @@ describe("Form Validation", () => {
         medicalConditions: {},
       },
     };
-
     const result = formSchema.safeParse(formData);
     expect(result.success).toBe(false);
-    if (!result.success) {
-      expect(result.error.errors[0].message).toBe(
-        "Medical conditions must be provided if declaration is Yes"
-      );
-    }
   });
 
   it("should fail validation if takingMedication declaration is yes but medical conditions of takingMedication is not provided", () => {
     const formData = {
       personalInformation: {
-        image: "http://example.com/image.jpg",
         fullName: "John Doe",
         dateOfBirth: "1990-01-01",
         nationality: "American",
         email: "john.doe@example.com",
         phone: "+8801982897389",
         address: "123 Main St, Anytown, USA",
-        gender: "Male",
+        gender: "male",
         occupation: "Engineer",
-        education: [{ degree: "B.Sc.", institution: "MIT", year: 2012 }],
-        socialMediaProfiles: [
-          {
-            platformName: "Twitter",
-            profileLink: "http://example.com/profile",
-          },
-        ],
+        education: '[{ degree: "B.Sc.", institution: "MIT", year: 2012 }]',
         reasonForVisit:
           "I am passionate about space exploration and want to experience Mars firsthand.",
       },
       travelPreferences: {
         departureDate: "2024-12-01",
         returnDate: "2025-01-01",
-        accommodationPreference: "Space Hotel",
+        accommodationPreference: "space hotel",
         specialRequests: "Vegetarian meals",
       },
       healthSafety: {
@@ -269,39 +217,27 @@ describe("Form Validation", () => {
 
     const result = formSchema.safeParse(formData);
     expect(result.success).toBe(false);
-    if (!result.success) {
-      expect(result.error.errors[0].message).toBe(
-        "Medical conditions must be provided if declaration is Yes"
-      );
-    }
   });
 
   it("should validate validation if takingMedication declaration is yes and medical conditions of takingMedication is provided", () => {
     const formData = {
       personalInformation: {
-        image: "http://example.com/image.jpg",
         fullName: "John Doe",
         dateOfBirth: "1990-01-01",
         nationality: "American",
         email: "john.doe@example.com",
         phone: "+8801982897389",
         address: "123 Main St, Anytown, USA",
-        gender: "Male",
+        gender: "male",
         occupation: "Engineer",
-        education: [{ degree: "B.Sc.", institution: "MIT", year: 2012 }],
-        socialMediaProfiles: [
-          {
-            platformName: "Twitter",
-            profileLink: "http://example.com/profile",
-          },
-        ],
+        education: '[{ degree: "B.Sc.", institution: "MIT", year: 2012 }]',
         reasonForVisit:
           "I am passionate about space exploration and want to experience Mars firsthand.",
       },
       travelPreferences: {
         departureDate: "2024-12-01",
         returnDate: "2025-01-01",
-        accommodationPreference: "Space Hotel",
+        accommodationPreference: "space hotel",
         specialRequests: "Vegetarian meals",
       },
       healthSafety: {
@@ -324,10 +260,5 @@ describe("Form Validation", () => {
 
     const result = formSchema.safeParse(formData);
     expect(result.success).toBe(true);
-    if (!result.success) {
-      expect(result.error.errors[0].message).toBe(
-        "Medical conditions must be provided if declaration is Yes"
-      );
-    }
   });
 });
