@@ -13,6 +13,7 @@ import { Form } from "./ui/form";
 import { FormStepOne } from "./form-steps/form-step-one";
 import { FormStepTwo } from "./form-steps/form-step-two";
 import { FormStepThree } from "./form-steps/form-step-three";
+import axios from "axios";
 
 const steps: StepsType[] = [
   {
@@ -71,6 +72,7 @@ const steps: StepsType[] = [
 ];
 
 export function MultiStepForm() {
+  const [loading, setLoading] = useState<boolean>(false);
   const [previousStep, setPreviousStep] = useState<number>(0);
   const [currentStep, setCurrentStep] = useState<number>(0);
   const delta = currentStep - previousStep;
@@ -139,14 +141,28 @@ export function MultiStepForm() {
   };
 
   const prev = () => {
-    if (currentStep > 0) {
+    if (currentStep === steps.length - 1) {
+      setPreviousStep(currentStep);
+      setCurrentStep(0);
+    } else if (currentStep > 0) {
       setPreviousStep(currentStep);
       setCurrentStep((step) => step - 1);
     }
   };
 
-  const processForm: SubmitHandler<FromInputs> = (data) => {
-    console.log(data);
+  const processForm: SubmitHandler<FromInputs> = async (data) => {
+    try {
+      setLoading(true);
+      const response = await axios.post("/api/add", data);
+      console.log(response.data);
+      console.log("Adding form information to db", response.data, {
+        timeout: 5000, // 5 seconds timeout
+      });
+    } catch (error: any) {
+      console.log("Failed to and form information", error.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -154,7 +170,6 @@ export function MultiStepForm() {
       <div className="relative bg-background min-h-[40rem] rounded-[var(--radius)] flex flex-col md:flex-row overflow-hidden">
         {/* left side */}
         <div className="md:w-1/3 bg-muted p-8">
-          <p>{JSON.stringify(errors, null, 2)}</p>
           <Steps steps={steps} currentStep={currentStep} />
         </div>
 

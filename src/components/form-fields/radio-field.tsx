@@ -41,11 +41,11 @@ export function RadioField({
                 }}
               >
                 <div className="flex items-center space-x-2">
-                  <RadioGroupItem value={"false"} id={`${name}-option-one`} checked={!field.value} />
+                  <RadioGroupItem value={"false"} id={`${name}-option-one`} />
                   <Label htmlFor={`${name}-option-one`}>No</Label>
                 </div>
                 <div className="flex items-center space-x-2">
-                  <RadioGroupItem value={"true"} id={`${name}-option-two`} checked={field.value} />
+                  <RadioGroupItem value={"true"} id={`${name}-option-two`} />
                   <Label htmlFor={`${name}-option-two`}>Yes</Label>
                 </div>
               </RadioGroup>
