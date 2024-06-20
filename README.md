@@ -21,7 +21,7 @@ npm install
 ```
 
 ## Create a .env file at the root of the repository and just bring your mongodb connection string into it like shown below
-> create a file named .env
+> create a file named .env.local
 ```bash
 DB_URI=mongodb+srv://<username>:<password>@cluster0.blxzqo7.mongodb.net/RedPlanetQuest
 ```
